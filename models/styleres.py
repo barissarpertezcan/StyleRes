@@ -34,7 +34,7 @@ class StyleRes(nn.Module):
         Inputs: Input images and edit configs
         Returns: Edited images
     """
-    def edit_images(self, image, cfg, latent=None):
+    def edit_images(self, image, cfg, latent=False):
         image = image.to(self.device)
         with torch.no_grad():
             latents, skips = self.encoder(image)
