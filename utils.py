@@ -85,6 +85,8 @@ class AppUtils():
             return -25, 25, 0.1
         elif method == 'styleclip':
             return 0, 0.2, 0.01
+        elif method == 'DragGAN':
+            return 0, 0, 0
 
     def get_examples(self):
         examples = [
