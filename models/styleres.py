@@ -34,7 +34,7 @@ class StyleRes(nn.Module):
         Inputs: Input images and edit configs
         Returns: Edited images
     """
-    def edit_images(self, image, cfg):
+    def edit_images(self, image, cfg, latent=None):
         image = image.to(self.device)
         with torch.no_grad():
             latents, skips = self.encoder(image)
@@ -43,8 +43,11 @@ class StyleRes(nn.Module):
                 latents = self.generator(latents, None, return_styles=True)
 
         # GradCtrl requires gradients, others do not
-        latents_edited = self.editor.edit(latents, cfg) 
-
+        if not latent:
+            latents_edited = self.editor.edit(latents, cfg) 
+        else:
+            latents_edited = torch.load("latents_edited.pt") # may be in a special directory called latents
+            
         with torch.no_grad():
             # Get F space features F_feats, for the original image
             skips['F_feats'] = self.generator(latents, skips, return_f = True, **self.G_kwargs_val)
