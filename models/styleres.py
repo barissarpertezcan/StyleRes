@@ -46,7 +46,7 @@ class StyleRes(nn.Module):
         if not latent:
             latents_edited = self.editor.edit(latents, cfg) 
         else:
-            latents_edited = torch.load("latents_edited.pt") # may be in a special directory called latents
+            latents_edited = torch.load("latents/latents_edited.pt") # may be in a special directory called latents
             
         with torch.no_grad():
             # Get F space features F_feats, for the original image
