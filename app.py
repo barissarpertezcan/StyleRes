@@ -413,17 +413,18 @@ with gr.Blocks() as demo:
                     
                     with gr.Row():
                         # , value="samples/demo_samples/116.jpg", interactive=True
-                        draggan_img_input = gr.Image(type="pil", shape=(256,256), label='Input Image', value="samples/demo_samples/116.jpg").style(height=256)
+                        draggan_img_input = gr.Image(type="pil", shape=(256,256), label='Input Image', value="samples/demo_samples/116.jpg").style(height=300)
                         # print("draggan_img_input:", draggan_img_input)
-                        draggan_img_output = gr.Image(type="pil", shape=(256,256), label='Output Image', interactive=False).style(height=256)
+                        draggan_img_output = gr.Image(type="pil", shape=(256,256), label='Output Image', interactive=False).style(height=300)
 
         gr.Markdown("""
             ## Quick Start
 
             1. Select desired `Pretrained Model` and adjust `Seed` to generate an
             initial image.
-            2. Click on image to add control points.
-            3. Click `Start` and enjoy it!
+            2. To change image with the uploaded image, click `Reset Image`.        
+            3. Click on image to add control points.
+            4. Click `Start` and enjoy it!
 
             ## Advance Usage
 
@@ -716,6 +717,8 @@ with gr.Blocks() as demo:
                         gr.Checkbox.update(interactive=False),
                         # gr.Number.update(interactive=False),
                         gr.Number.update(interactive=False),
+                        # show results button interactive
+                        # gr.Button.update(interactive=False)
                     )
 
                     # increate step
@@ -756,6 +759,8 @@ with gr.Blocks() as demo:
                     gr.Number.update(interactive=True),
                     gr.Checkbox.update(interactive=True),
                     gr.Number.update(interactive=True),
+                    # show results button interactive
+                    # gr.Button.update(interactive=True)
                 )
 
         form_start_btn.click(
