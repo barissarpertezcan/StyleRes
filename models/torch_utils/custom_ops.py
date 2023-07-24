@@ -54,7 +54,10 @@ def _get_mangled_gpu_name():
 #----------------------------------------------------------------------------
 # Main entry point for compiling and loading C++/CUDA plugins.
 
-_cached_plugins = dict()
+try:
+    from torch_utils.custom_ops import _cached_plugins
+except:
+    _cached_plugins = dict()
 
 def get_plugin(module_name, sources, headers=None, source_dir=None, **build_kwargs):
     assert verbosity in ['none', 'brief', 'full']
