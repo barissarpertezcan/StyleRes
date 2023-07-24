@@ -4,6 +4,8 @@ from utils import AppUtils
 from datasets.process_image import ImageProcessor
 from argparse import ArgumentParser
 
+# from ..DragGAN import *
+
 parser = ArgumentParser()
 parser.add_argument('--device', type=str, default='cpu', help='Which device to use')
 args = parser.parse_args()
@@ -41,35 +43,42 @@ with gr.Blocks() as demo:
     <center> Our model finds high-quality GAN space representations, which can also adopt to various edits without explicitly being trained on them.
             Here, we showcase some of the examples from the test dataset, as well as real internet images.  </center>
     """)
-    with gr.Row():
-        image_input = gr.Image(type="pil", shape=(256,256), label='Input Image', value="samples/demo_samples/116.jpg").style(height=256)
-        image_output = gr.Image(type="pil", shape=(256,256), label='Output Image').style(height=256)
+    with gr.Tab("Usual Methods"):
+        with gr.Row():
+            image_input = gr.Image(type="pil", shape=(256,256), label='Input Image', value="samples/demo_samples/116.jpg").style(height=256)
+            image_output = gr.Image(type="pil", shape=(256,256), label='Output Image').style(height=256)
 
-    with gr.Row():
-        with gr.Column(scale=0.25, min_width=50):
-            methods_drowdown = gr.Dropdown(methods, label="Choose Method", value=methods[0])
-        with gr.Column(scale=0.25, min_width=50):
-            edits_dropdown = gr.Dropdown(utils.get_edits(methods[0]), label="Choose Edit", value=utils.get_edits(methods[0])[0])
- 
-
-    with gr.Row(): 
-        with gr.Column(scale=0.1, min_width=50):
-            is_align_checked = gr.Checkbox(label="Crop + Align")
-        with gr.Column(scale=0.4, min_width=50):
-            factor_slider = gr.Slider(-5, 5, value=0, label="Strength [-5, 5]")
-    with gr.Row(): 
-        with gr.Column(scale=0.5, min_width=50):
-            submit_button = gr.Button(value="Edit")
+        with gr.Row():
+            with gr.Column(scale=0.25, min_width=50):
+                methods_drowdown = gr.Dropdown(methods, label="Choose Method", value=methods[0])
+            with gr.Column(scale=0.25, min_width=50):
+                edits_dropdown = gr.Dropdown(utils.get_edits(methods[0]), label="Choose Edit", value=utils.get_edits(methods[0])[0])
     
-    gr.Examples(
-        examples=utils.get_examples(),
-        inputs=[image_input, methods_drowdown,  edits_dropdown, factor_slider, is_align_checked],
-        outputs=image_output,
-        fn=process_image,
-        cache_examples=True,
-    )
-    methods_drowdown.change(update_edit_dropdown, inputs=methods_drowdown, outputs=edits_dropdown )
-    methods_drowdown.change(update_slider, inputs=methods_drowdown, outputs=factor_slider)
-    submit_button.click(process_image, inputs=[image_input, methods_drowdown,  edits_dropdown, factor_slider, is_align_checked], outputs=image_output)
 
-demo.launch(debug=True)
+        with gr.Row(): 
+            with gr.Column(scale=0.1, min_width=50):
+                is_align_checked = gr.Checkbox(label="Crop + Align")
+            with gr.Column(scale=0.4, min_width=50):
+                factor_slider = gr.Slider(-5, 5, value=0, label="Strength [-5, 5]")
+        with gr.Row(): 
+            with gr.Column(scale=0.5, min_width=50):
+                submit_button = gr.Button(value="Edit")
+        
+        gr.Examples(
+            examples=utils.get_examples(),
+            inputs=[image_input, methods_drowdown,  edits_dropdown, factor_slider, is_align_checked],
+            outputs=image_output,
+            fn=process_image,
+            cache_examples=True,
+        )
+        methods_drowdown.change(update_edit_dropdown, inputs=methods_drowdown, outputs=edits_dropdown )
+        methods_drowdown.change(update_slider, inputs=methods_drowdown, outputs=factor_slider)
+        submit_button.click(process_image, inputs=[image_input, methods_drowdown,  edits_dropdown, factor_slider, is_align_checked], outputs=image_output)
+
+    with gr.Tab("DragGAN"):
+        with gr.Row():
+            image_input = gr.Image(type="pil", shape=(256,256), label='Input Image', value="samples/demo_samples/116.jpg").style(height=256)
+            image_output = gr.Image(type="pil", shape=(256,256), label='Output Image').style(height=256)
+
+
+demo.launch(debug=True, share=True)
